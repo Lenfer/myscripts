@@ -2,14 +2,16 @@
 
 
 project=${1:-makeup}
+ROOT=${2:-/home/dergaev/yawork/}
+hostname=${3:-mino}
 
-hostname=${2:-mino}
 
 host="$hostname.yandex.ru"
-path="/opt/www/dergaev/$project"
+path="$ROOT$project"
 
-echo "..."
-echo -e "Check \e[32m\"$project\"\e[0m (\e[31m$host\e[0m:$path)"
+printf "...\n"
+printf  "Check \e[32m\"$project\"\e[0m (\e[31m$host\e[0m:$path)\n"
+
 
 #Branch name should be equal
 git_branchname="git rev-parse --abbrev-ref HEAD"
@@ -20,7 +22,7 @@ if [ "$local_branch" == "$remote_branch" ]; then
 else
 	branch_res="\e[31mErr\e[0m"
 fi
-echo -e " -> Branch name-$branch_res ( $local_branch <-> $remote_branch )"
+printf " -> Branch name-$branch_res ( $local_branch <-> $remote_branch )\n"
 
 #HEAD commit should be equal
 git_last_commit="git rev-parse --short HEAD"
@@ -31,7 +33,7 @@ if [ "$local_last_commit" == "$remote_last_commit" ]; then
 else
 	hash_commit_res="\e[31mErr\e[0m"
 fi
-echo -e " -> HEAD commit-$hash_commit_res ( $local_last_commit <-> $remote_last_commit )"
+printf " -> HEAD commit-$hash_commit_res ( $local_last_commit <-> $remote_last_commit )\n"
 
 #DIFF should be equal
 git_diff="git diff"
@@ -49,6 +51,6 @@ if [ "$local_diff" == "$remote_diff" ]; then
 else
 	diff_res="\e[31mErr\e[0m"
 fi
-echo -e " -> diff-$diff_res"
+printf " -> diff-$diff_res\n"
 
 

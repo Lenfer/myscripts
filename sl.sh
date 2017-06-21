@@ -2,9 +2,8 @@
 
 if test -t 0
 then
-	/cygdrive/c/Program\ Files/Sublime\ Text\ 3/subl.exe $*
+	/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl $*
 else
-	# echo "Not yet! Read data from stdin"
 	timestamp=`date +%s`
 	filename=$1
 	shift
@@ -14,7 +13,7 @@ else
 	do
 		echo "$data" >> "$filename"
 	done
-	/cygdrive/c/Program\ Files/Sublime\ Text\ 3/subl.exe $filename $*
+	/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl $filename $*
 	sleep 1
 	rm "$filename"
 fi

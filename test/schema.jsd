@@ -1,0 +1,175 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "fine",
+    "title": "Штраф",
+    "description": "Штраф",
+    "type": "object",
+    "properties": {
+        "is_archived": {
+            "type": "boolean",
+            "default": false,
+            "description": "Сущность передана в архив"
+        },
+        "is_deleted": {
+            "type": "boolean",
+            "default": false,
+            "description": "Сущность помечена на удаление"
+        },
+        "state": {
+            "type": "string",
+            "default": "NEW",
+            "description": "Статус",
+            "oneOf": [{
+                "pattern": "DRAFT",
+                "name": "Черновик",
+                "description": "Создан черновой вариант бизнес-сущности"
+            }, {
+                "pattern": "NEW",
+                "name": "Новый",
+                "description": "Выполнено первое сохранение данных бизнес-сущности"
+            }, {
+                "pattern": "ACCEPTED",
+                "name": "Согласовано",
+                "description": "Внесены первичные данные о Штрафе: Постановление о назначении штрафа переведено в статус ON_APPROVAL или ON_SIGNINIG"
+            }, {
+                "pattern": "CHARGED",
+                "name": "Начислен",
+                "description": "Постановление о вынесении штрафа или Постановление о прекращении дела переведено в статус ON_APPROVAL или ON_SIGNING"
+            }, {
+                "pattern": "EXECUTED",
+                "name": "Оплачен",
+                "description": "Постановление о вынесении штрафа или Постановление о прекращении дела переведено в статус EXECUTED"
+            }, {
+                "pattern": "CANCELED",
+                "name": "Аннулирован",
+                "description": "Пользователь инициировал операцию аннулирования начисления штрафа и приложил документ-основание"
+            }, {
+                "pattern": "UNCANCELED",
+                "name": "Дуаннулирован",
+                "description": "Пользователь инициировал операцию деаннулирования начисления штрафа и приложил документ-основание"
+            } ]
+        },
+        "source": {
+            "$ref": "./source.jsd"
+        },
+        "number": {
+            "type": "string",
+            "description": "Уникальный идентификатор начисления (УИН)"
+        },
+        "date": {
+            "type": "string",
+            "description": "Дата выставления штрафа - дата вступления в силу Постановления о выставлении штрафа",
+            "format": "date-time"
+        },
+        "title": {
+            "type": "string",
+            "description": "Наименование документа"
+        },
+        "case_administrative_offence": {
+            "type": "string",
+            "description": "Дело об АП, с рамках которого выставлен штраф",
+            "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+        },
+        "amount": {
+            "type": "number",
+            "description": "Сумма штрафа"
+        },
+        "payment_deadline": {
+            "type": "string",
+            "description": "Срок платежа",
+            "format": "date-time"
+        },
+        "validity": {
+            "type": "string",
+            "description": "Срок актуальности выставленного штрафа",
+            "format": "date-time"
+        },
+        "payment_details": {
+            "type": "object",
+            "description": "Платёжные реквизиты",
+            "properties": {
+                "payee": {
+                    "type": "string",
+                    "description": "Получатель платежа - ГУСН",
+                    "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+                },
+                "payer": {
+                    "type": "string",
+                    "description": "Информация о плательщике",
+                    "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+                },
+                "payment_reference": {
+                    "type": "string",
+                    "description": "Назначение платежа"
+                }
+            }
+        },
+        "fine_history": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "description": "Платёжные реквизиты",
+                "required": ['operation', 'change_state_reason'],
+                "properties": {
+                    "operation": {
+                        "type": "string",
+                        "description": "Операция: Изменение, Аннулирование, Деаннулирование",
+                        "oneOf": [
+                            {
+                                "pattern": "CHANGE",
+                                "name": "Изменение"
+                            },
+                            {
+                                "pattern": "CANCEL",
+                                "name": "Аннулирование"
+                            },
+                            {
+                                "pattern": "UNCANCEL",
+                                "name": "Деаннулирование"
+                            }
+                        ]
+                    },
+                    "change_state_reason": {
+                        "type": "string",
+                        "description": "Документ-основание для изменения",
+                        "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+                    }
+                }
+            }
+        },
+        "isunp_state": {
+            "type": "string",
+            "default": "UNKNOWN",
+            "description": "Статус отправки начисления штрафа в ИС УНП",
+            "oneOf": [{
+                "pattern": "UNKNOWN",
+                "name": "Новое"
+            }, {
+                "pattern": "READY_FOR_EXPORT",
+                "name": "Готов к выгрузке"
+            }, {
+                "pattern": "SENT",
+                "name": "Отправлено"
+            }, {
+                "pattern": "CANCELED",
+                "name": "Аннулировано"
+            }, {
+                "pattern": "UNCANCELED",
+                "name": "Деаннулировано"
+            }, {
+                "pattern": "ERROR",
+                "name": "Ошибка отправки"
+            }]
+        },
+        "quittance": {
+            "type": "string",
+            "description": "Данные квитирования по штрафу в ИС УНП",
+            "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+        },
+        "note": {
+            "type": "string",
+            "description": "Примечание. Произвольный текст"
+        }
+    },
+    "additionalProperties": false
+}

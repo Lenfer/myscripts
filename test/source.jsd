@@ -1,0 +1,6 @@
+{
+    "type": "string",
+    "default": "ADIIOS",
+    "description": "Источник: ADIIOS, SF",
+    "enum": [ "ADIIOS", "SF" ]
+}
