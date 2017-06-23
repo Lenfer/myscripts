@@ -50,3 +50,9 @@ grjs varname | sl
 
 ##tgitblame.sh
 ##tgitdiff.sh
+
+
+
+# COOKBOOK
+## render with curl
+curl "http://localhost:1332/api-be/business-entity-type/code/quittance" -s -H "token: f1f7bc7bfb7870f36e6fcf356cfe5a62eb3ae2a4f236ae582484d1dbaf1f9e9c" | jq -r '.schema' | jsf
