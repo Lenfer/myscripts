@@ -3,7 +3,8 @@
 const path = require('path');
 const refParser = require('json-schema-ref-parser');
 
-let source = path.join(process.cwd(), process.argv[2])
+const argPath = process.argv[2];
+let source = path.isAbsolute(argPath) ? argPath : path.join(process.cwd(), argPath)
 
 try {
 	source = require(source);
